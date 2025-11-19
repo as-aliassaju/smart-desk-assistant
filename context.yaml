@@ -1,0 +1,4 @@
+context:
+  motion_sensor: False
+  light_sensor: 50
+  temperature_sensor: 25

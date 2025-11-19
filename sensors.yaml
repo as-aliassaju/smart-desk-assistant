@@ -1,0 +1,10 @@
+sensors:
+  motion_sensor:
+    type: boolean
+    description: Detects if someone is at the desk
+  light_sensor:
+    type: integer
+    description: Measures light intensity (0-100)
+  temperature_sensor:
+    type: integer
+    description: Measures desk area temperature in Celsius

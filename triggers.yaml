@@ -1,0 +1,12 @@
+triggers:
+  welcome_message:
+    condition: "motion_sensor == True"
+    action: "print('Welcome! Adjusting your desk settings...')"
+  
+  light_adjustment:
+    condition: "light_sensor < 30"
+    action: "print('Turning on desk light for better visibility')"
+  
+  temperature_adjustment:
+    condition: "temperature_sensor > 28"
+    action: "print('Activating fan to cool down the desk area')"
