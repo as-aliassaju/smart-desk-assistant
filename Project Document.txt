@@ -1,3 +1,99 @@
 Git hub URL : https://github.com/as-aliassaju/smart-desk-assistant.git
 
 Jenkins app : smart-reflex-pipeline
+
+
+
+#!/bin/bash
+#=================================================
+# Smart Desk Assistant – CI/CD Deployment Documentation
+#=================================================
+
+OUTPUT_FILE="smart_desk_cicd_info.txt"
+
+cat <<EOL > $OUTPUT_FILE
+Smart Desk Assistant – CI/CD Deployment and Testing
+
+1️⃣ Local Development
+The application is a Python-based Smart Desk Assistant.
+It reacts to events like motion, light, and temperature using Python scripts (simulator.py) and YAML configuration files (context.yaml, triggers.yaml, sensors.yaml).
+Before CI/CD, the application was tested locally to ensure proper functionality.
+
+2️⃣ Version Control
+Source code is hosted on GitHub: https://github.com/as-aliassaju/smart-desk-assistant
+The main branch is used for CI/CD.
+Every change is committed and pushed to GitHub.
+
+3️⃣ GitHub Personal Access Token
+A GitHub Personal Access Token (PAT) was created as a Global Credential.
+Purpose: Jenkins uses this token to authenticate securely with GitHub for:
+- Pulling repository code
+- Receiving webhook triggers
+- Avoiding the need for exposing GitHub username/password
+In Jenkins:
+Token is stored in Manage Jenkins → Credentials → Global Credentials.
+Referenced in the pipeline as credentialsId: 'github-token'.
+
+4️⃣ Jenkins Setup
+Installed Tools and Plugins:
+- Jenkins Core installed on a GCP VM
+- Git Plugin (for repository cloning)
+- Pipeline Plugin (for Declarative Pipelines)
+- Docker Pipeline Plugin (for Docker build/run integration)
+- Git installed on the VM (git version 2.39.5)
+- Docker Engine installed on the VM to build and run containers
+- Jenkins user added to Docker group to allow Docker commands from pipelines
+
+5️⃣ CI/CD Pipeline Creation
+Jenkins job converted from a Freestyle project to a Declarative Pipeline.
+Jenkinsfile stages:
+- Stage 1: Clone Repo
+  git credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/smart-desk-assistant.git'
+- Stage 2: Build Docker Image
+  sh "docker build -t simple-reflex-simulator:\${BUILD_NUMBER} ."
+- Stage 3: Stop & Remove Old Container
+  sh """
+      docker stop reflex-sim || true
+      docker rm reflex-sim || true
+  """
+- Stage 4: Run Docker Container
+  sh "docker run -d --name reflex-sim simple-reflex-simulator:\${BUILD_NUMBER}"
+
+6️⃣ Post-build Actions
+- Success: Logs a success message
+- Failure: Stops/removes any leftover containers
+- Always: Logs the build number for traceability
+
+7️⃣ Testing the Python Application in Docker
+- Step 1: Check Docker Images
+  docker images
+- Step 2: Run the Container
+  docker run -d --name reflex-sim simple-reflex-simulator:<BUILD_NUMBER>
+- Step 3: View Logs
+  docker logs -f reflex-sim
+- Step 4: Optional Interactive Test
+  docker run -it --name reflex-sim-demo simple-reflex-simulator:<BUILD_NUMBER> /bin/bash
+  python simulator.py
+
+8️⃣ Tools Installed / Used
+- Jenkins – Continuous Integration server
+- Git – Version control
+- Docker Engine – To build and run containers
+- Jenkins Plugins: Pipeline Plugin, Git Plugin, Docker Pipeline Plugin
+- Global GitHub Personal Access Token – For secure authentication
+
+9️⃣ Conclusion
+The CI/CD pipeline fully automates:
+- Pulling the latest code from GitHub
+- Building Docker images
+- Stopping old containers
+- Running new containers
+The Python app was tested inside Docker both via logs and interactively.
+Using GitHub token ensures secure automated access.
+This setup guarantees continuous integration and continuous deployment for the Smart Desk Assistant.
+
+Workflow: GitHub → Jenkins (CI/CD) → Docker → Python App running
+
+EOL
+
+echo "CI/CD documentation saved to $OUTPUT_FILE"
