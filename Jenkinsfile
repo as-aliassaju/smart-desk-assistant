@@ -11,7 +11,8 @@ pipeline {
         stage('Clone Repo') {
             steps {
                 echo "Cloning repository..."
-                git credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/smart-desk-assistant.git'
+                // Explicitly specify branch 'main' to avoid checkout errors
+                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/smart-desk-assistant.git'
             }
         }
 
@@ -56,4 +57,3 @@ pipeline {
         }
     }
 }
-
