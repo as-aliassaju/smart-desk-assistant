@@ -1,0 +1,3 @@
+Git hub URL : https://github.com/as-aliassaju/smart-desk-assistant.git
+
+Jenkins app : smart-reflex-pipeline

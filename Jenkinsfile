@@ -11,7 +11,7 @@ pipeline {
         stage('Clone Repo') {
             steps {
                 echo "Cloning repository..."
-                git credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/simple_reflex_app.git'
+                git credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/smart-desk-assistant.git'
             }
         }
 
