@@ -2,24 +2,42 @@ pipeline {
     agent any
 
     environment {
+        PROJECT_ID = "bubbly-mission-478719"
         DOCKER_IMAGE = "simple-reflex-simulator"
-        CONTAINER_NAME = "reflex-sim"
         IMAGE_TAG = "${env.BUILD_NUMBER}" // Unique tag per build
+        GCR_IMAGE = "gcr.io/${PROJECT_ID}/${DOCKER_IMAGE}:${IMAGE_TAG}"
     }
 
     stages {
         stage('Clone Repo') {
             steps {
                 echo "Cloning repository..."
-                // Explicitly specify branch 'main' to avoid checkout errors
                 git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/smart-desk-assistant.git'
+            }
+        }
+
+        stage('Authenticate to GCP') {
+            steps {
+                echo "Authenticating to GCP..."
+                sh '''
+                    gcloud auth activate-service-account --key-file=/var/lib/jenkins/gcloud-sa.json
+                    gcloud config set project $PROJECT_ID
+                    gcloud auth configure-docker gcr.io --quiet
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image ${DOCKER_IMAGE}:${IMAGE_TAG}..."
-                sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
+                sh "docker build -t ${GCR_IMAGE} ."
+            }
+        }
+
+        stage('Push Docker Image to GCR') {
+            steps {
+                echo "Pushing image to GCR..."
+                sh "docker push ${GCR_IMAGE}"
             }
         }
 
@@ -27,29 +45,29 @@ pipeline {
             steps {
                 echo "Stopping and removing old container if exists..."
                 sh """
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
+                    docker stop ${DOCKER_IMAGE} || true
+                    docker rm ${DOCKER_IMAGE} || true
                 """
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                echo "Running new container ${CONTAINER_NAME}..."
-                sh "docker run -d --name ${CONTAINER_NAME} ${DOCKER_IMAGE}:${IMAGE_TAG}"
+                echo "Running container ${DOCKER_IMAGE}..."
+                sh "docker run -d --name ${DOCKER_IMAGE} ${GCR_IMAGE}"
             }
         }
     }
 
     post {
         success {
-            echo "Build completed successfully!"
+            echo "✅ Build + push + deployment completed successfully!"
         }
         failure {
-            echo "Build failed. Cleaning up..."
+            echo "❌ Build failed. Cleaning up..."
             sh """
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
+                docker stop ${DOCKER_IMAGE} || true
+                docker rm ${DOCKER_IMAGE} || true
             """
         }
         always {
