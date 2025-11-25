@@ -6,21 +6,31 @@ pipeline {
         DOCKER_IMAGE = "simple-reflex-simulator"
         IMAGE_TAG = "${env.BUILD_NUMBER}" // Unique tag per build
         GCR_IMAGE = "gcr.io/${PROJECT_ID}/${DOCKER_IMAGE}:${IMAGE_TAG}"
-        CONTAINER_NAME = "reflex-sim"
+        CLUSTER_NAME = "reflex-gke-cluster"
+        CLUSTER_ZONE = "us-central1-a"
     }
 
     stages {
 
         stage('Clone Repo') {
             steps {
-                echo "Cloning repository..."
                 git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/as-aliassaju/smart-desk-assistant.git'
             }
         }
 
-        stage('Prepare Docker/GCR') {
+        stage('Terraform Init & Apply') {
             steps {
-                echo "Configuring Docker to push to GCR..."
+                dir('terraform') {
+                    sh '''
+                        terraform init
+                        terraform apply -auto-approve -var "project_id=${PROJECT_ID}" -var "region=${CLUSTER_ZONE}" -var "cluster_name=${CLUSTER_NAME}"
+                    '''
+                }
+            }
+        }
+
+        stage('Authenticate to GCP & Docker') {
+            steps {
                 sh '''
                     gcloud config set project $PROJECT_ID
                     gcloud auth configure-docker gcr.io --quiet
@@ -30,49 +40,32 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker image ${DOCKER_IMAGE}:${IMAGE_TAG}..."
                 sh "docker build -t ${GCR_IMAGE} ."
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                echo "Pushing Docker image to GCR..."
                 sh "docker push ${GCR_IMAGE}"
             }
         }
 
-        stage('Stop & Remove Old Container') {
+        stage('Get GKE Credentials') {
             steps {
-                echo "Stopping old container if exists..."
-                sh """
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                """
+                sh "gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE --project $PROJECT_ID"
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Deploy to Kubernetes') {
             steps {
-                echo "Running new container ${CONTAINER_NAME}..."
-                sh "docker run -d --name ${CONTAINER_NAME} ${GCR_IMAGE}"
+                sh "sed 's|{{IMAGE_TAG}}|${IMAGE_TAG}|g' k8s_deployment.yaml | kubectl apply -f -"
             }
         }
     }
 
     post {
-        success {
-            echo "✅ Build, push, and deployment completed successfully!"
-        }
-        failure {
-            echo "❌ Build failed. Cleaning up..."
-            sh """
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
-            """
-        }
-        always {
-            echo "Finished build #${env.BUILD_NUMBER}"
-        }
+        success { echo "✅ Build, push, Terraform, and deployment completed successfully!" }
+        failure { echo "❌ Build failed. Check logs." }
+        always { echo "Finished build #${env.BUILD_NUMBER}" }
     }
 }

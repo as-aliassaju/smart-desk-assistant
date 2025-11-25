@@ -97,3 +97,23 @@ Workflow: GitHub → Jenkins (CI/CD) → Docker → Python App running
 EOL
 
 echo "CI/CD documentation saved to $OUTPUT_FILE"
+
+
+#############################
+
+
+
+Jenkins clones repo.
+
+Terraform initializes and creates GKE cluster.
+
+Docker builds image and pushes to GCR.
+
+Jenkins fetches GKE credentials.
+
+Kubernetes deployment YAML is updated with the latest IMAGE_TAG.
+
+Jenkins applies deployment → app runs in GKE.
+
+
+##############################

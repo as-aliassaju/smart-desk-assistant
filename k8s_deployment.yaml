@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reflex-simulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reflex-simulator
+  template:
+    metadata:
+      labels:
+        app: reflex-simulator
+    spec:
+      containers:
+      - name: reflex-sim
+        image: gcr.io/bubbly-mission-478719-h6/simple-reflex-simulator:{{IMAGE_TAG}}
+        ports:
+        - containerPort: 5000
+

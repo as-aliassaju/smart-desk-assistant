@@ -5,9 +5,12 @@ import random
 # Load YAML files
 with open("context.yaml") as f:
     context = yaml.safe_load(f)["context"]
+    #loading context from context.yaml into python 
 
 with open("triggers.yaml") as f:
     triggers = yaml.safe_load(f)["triggers"]
+    #Purpose: Load all trigger rules from triggers.yaml into a Python dictionary.
+    #Your python pgm will loop through this dictionary, check each condition, and execute the action if it’s True.
 
 def evaluate_triggers():
     for trigger_name, trigger in triggers.items():
