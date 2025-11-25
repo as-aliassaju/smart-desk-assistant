@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment files
+.env
+*.env
+
+# Virtual environments
+venv/
+.venv/
+
+# GCP / AWS / Azure credentials (very important)
+*.json
+*.key
+*.pem
+
+# Logs
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Build / Cache
+dist/
+build/

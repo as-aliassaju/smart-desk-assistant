@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_ID = "bubbly-mission-478719"
+        PROJECT_ID = "bubbly-mission-478719-h6"
         DOCKER_IMAGE = "simple-reflex-simulator"
-        IMAGE_TAG = "${env.BUILD_NUMBER}" // Unique tag per build
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
         GCR_IMAGE = "gcr.io/${PROJECT_ID}/${DOCKER_IMAGE}:${IMAGE_TAG}"
     }
 
@@ -16,20 +16,9 @@ pipeline {
             }
         }
 
-        stage('Authenticate to GCP') {
-            steps {
-                echo "Authenticating to GCP..."
-                sh '''
-                    gcloud auth activate-service-account --key-file=/var/lib/jenkins/gcloud-sa.json
-                    gcloud config set project $PROJECT_ID
-                    gcloud auth configure-docker gcr.io --quiet
-                '''
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker image ${DOCKER_IMAGE}:${IMAGE_TAG}..."
+                echo "Building Docker image ${GCR_IMAGE}..."
                 sh "docker build -t ${GCR_IMAGE} ."
             }
         }
