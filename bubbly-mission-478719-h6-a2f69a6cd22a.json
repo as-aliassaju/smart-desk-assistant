@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "bubbly-mission-478719-h6",
+  "private_key_id": "a2f69a6cd22a04fe7b0cbc179928c2dae842d027",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDm8H9810QWsZ5G\nKBg2yc5ouT1vM7EEwXqcHKIhYvRXfqWXd8nJ86QkAgReTxbGHoF6EvLZbNoYd3/l\nkrr1rOwfe7MT1Cly23MQR/xzdB+kCZwqiB4sgzGLFanH2U6z+yrECuoTot9GeDwC\njAoVXwZugLJMQPKzYoBZ1gkEnQgXQcEJuNxVmfwWEbzYAzEz0m2Lh7P/hvbXelLI\nJLZraHgPhZvaYqONeIaqY2u7hhtN1LrvnNFvf2ygjNJgr6R43PoFiM1D3iJsFWMJ\n15mRAzpcEp42eiyaDnquQCov3CKwPF8vaLbdgphYbuxJAOZf2FeqMe8potmZJSae\nsuiJeJ3XAgMBAAECggEACM+vRY+fEPCY9dtMxTZg8jzzG52QyPoq1+79vqFcakQy\nRDu1TsfFgPw0t3Z0C34ZeZNkgag2EA3rKtK04G/HGJJrLDwBktjNpJbiinMpS+Rz\n+Wl1IUSmLMTYVAA2EQbpxE4YTUR/GVy4CW7XaaZVA/1UEDXALNj6xbK1aGAncV+l\n1GI4KWNCunIoyjEpo9x4kD4+CZGV/7Ip7XCseSjL73ktEnz2ebeTorHxpY1psbvY\nOAfbRQC/P6CvCkN9ZegD3yActqceIE9YJkVKot+ivUzbfNYKF6efNVz6s3Ffi15M\noAXozK8v3NjzSmHYnF8SklBQA9b4K3ambZ3GhDIwAQKBgQD0bs5Qkuh+LNy3dg2Z\n95wHl+X8X8WvkGo8uxnFwWED97vcZlflau9ovwXIDxfr2V6GtjGYLUTPBn5jTY4F\nwRlMUj2eC5g1/3GyW+8UhRzeaTL4Eh+x8Kju2jwKIfVDx9LIrHkYxiMwECX61qP1\nj/hWS2VGklxRSyXfBJuoGQ0QAQKBgQDx3jnIdeqorzh6ULaX5fJFuz2PtyLW1gTq\nBGGc/GrAfdlbJ942GvRFqoAOGPJVA2Ere83jBLJ573KlcZLItD281pCqWvImBTAb\nmlwdoFKC9j4DcO44WeCEnKkniTXbm2NK0esUbrQsO7Yd5YapOfj95qs/yjX/RsxB\nLQkpM7At1wKBgBiPXamY6UVsSo0gjoNO7t2QdKpkER/v2czaW9+T66STasvdeK1z\njjSvJOySH6wx/h55BgitW8GVfHOL4l5PpbQWe1x6+8NJNGpgdGhSa7EpTtbAM3EU\nplTBltDJ0rQJyvMg6VYE6po0tSw8DuNooOJC1x09LYt5ioebFezQ/5ABAoGARgZO\nuGjbPWctdMw1cRjT4bhqBFfDMGvaFF6cXDUAOya0bR3HyeZX3muUk4BJeK93zH0V\niKptebwHdzrAgnccgLWmQIwAG13ZJcS08qbd/KiKH7jsX0g2Jm6s0pN5ElGUl67a\n3pmGdF/9Q/6V1BzCp8/GuLs0kunObPg69MDQOxUCgYEAq0KEZNGREPeKn+3YpKCb\nZV1gcVnx5+Qkfq1i3ouIRAL1jKN05XQNIAq0B4z9aO5xydBWz8TttLljoSbQ9F3Y\n5E9q7KmXW2S0NaNUH2aVJ5D7ukDB7APh3QP24vo6oQ0ns1ks0RoGGosk+WhmlHQb\n8ZacWkZyOB9TsmvmYaxg3QE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "jenkins-deployer@bubbly-mission-478719-h6.iam.gserviceaccount.com",
+  "client_id": "109037696181709153543",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/jenkins-deployer%40bubbly-mission-478719-h6.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
