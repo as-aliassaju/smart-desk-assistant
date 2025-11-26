@@ -1,3 +1,13 @@
+"""
+Reflex Simulator Flask App
+--------------------------
+Author: Alias Saju
+Description: This app simulates a smart desk assistant using sensor triggers.
+Trigger Source: Evertz-VUE
+Project Architecture:
+    VUE -> Python App -> Git -> Jenkins -> Docker -> Google Artifact Registry -> Kubernetes Cluster -> Load Balancer
+"""
+
 from flask import Flask, jsonify
 import yaml
 import random
@@ -50,7 +60,24 @@ def home():
 def get_context():
     return jsonify(context)
 
+@app.route("/about")
+def about():
+    """Provide project and author details."""
+    return jsonify({
+        "author": "Alias Saju",
+        "trigger_source": "Evertz-VUE",
+        "description": "Smart desk assistant simulator",
+        "architecture": [
+            "VUE -> Python App",
+            "Python App -> Git",
+            "Git -> Jenkins",
+            "Jenkins -> Docker",
+            "Docker -> Google Artifact Registry",
+            "Artifact Registry -> Kubernetes Cluster",
+            "Kubernetes Cluster -> Load Balancer"
+        ]
+    })
+
 if __name__ == "__main__":
     # Flask runs on 0.0.0.0 so Kubernetes can access it
     app.run(host="0.0.0.0", port=5000)
-
