@@ -1,17 +1,16 @@
-# Use Python 3.11.9 slim base image
-FROM python:3.11.9-slim
+FROM python:3.12-slim
 
-# Set working directory inside container
 WORKDIR /app
 
-# Install PyYAML for YAML support
-RUN pip install pyyaml
+# Copy simulator files
+COPY simulator.py context.yaml triggers.yaml .
 
-# Copy all project files into the container
-COPY . .
+# Install dependencies
+RUN pip install pyyaml flask
 
-# Run the simulator when container starts
+# Run Flask app
 CMD ["python", "simulator.py"]
+
 
 
 

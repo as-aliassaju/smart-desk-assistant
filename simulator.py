@@ -1,32 +1,56 @@
+from flask import Flask, jsonify
 import yaml
-import time
 import random
+import threading
+import time
 
-# Load YAML files
+app = Flask(__name__)
+
+# Load context and triggers
 with open("context.yaml") as f:
     context = yaml.safe_load(f)["context"]
-    #loading context from context.yaml into python 
 
 with open("triggers.yaml") as f:
     triggers = yaml.safe_load(f)["triggers"]
-    #Purpose: Load all trigger rules from triggers.yaml into a Python dictionary.
-    #Your python pgm will loop through this dictionary, check each condition, and execute the action if it’s True.
 
 def evaluate_triggers():
+    """Evaluate triggers based on the current context."""
     for trigger_name, trigger in triggers.items():
-        condition = trigger["condition"]
-        # Evaluate condition using context variables
-        if eval(condition, {}, context):
-            exec(trigger["action"], {}, context)
+        condition = trigger.get("condition")
+        action = trigger.get("action")
+        try:
+            if eval(condition, {}, context):
+                exec(action, {}, context)
+        except Exception as e:
+            print(f"Error in trigger {trigger_name}: {e}")
 
-print("=== Smart Desk Assistant Simulator ===")
+def simulator_loop():
+    """Simulate sensor updates continuously."""
+    while True:
+        # Randomly change sensor values
+        context["motion_sensor"] = random.choice([True, False])
+        context["light_sensor"] = random.randint(0, 100)
+        context["temperature_sensor"] = random.randint(20, 35)
 
-for i in range(5):  # Simulate 5 cycles
-    # Randomly change sensor values
-    context["motion_sensor"] = random.choice([True, False])
-    context["light_sensor"] = random.randint(0, 100)
-    context["temperature_sensor"] = random.randint(20, 35)
+        # Evaluate triggers
+        evaluate_triggers()
 
-    print(f"\nCycle {i+1} - Sensor Values: {context}")
-    evaluate_triggers()
-    time.sleep(1)
+        # Print current context
+        print(f"[Simulator] Current context: {context}")
+        time.sleep(1)
+
+# Start the simulator in a background thread
+threading.Thread(target=simulator_loop, daemon=True).start()
+
+@app.route("/")
+def home():
+    return jsonify({"status": "Reflex Simulator Running", "context": context})
+
+@app.route("/context")
+def get_context():
+    return jsonify(context)
+
+if __name__ == "__main__":
+    # Flask runs on 0.0.0.0 so Kubernetes can access it
+    app.run(host="0.0.0.0", port=5000)
+
