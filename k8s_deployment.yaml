@@ -15,6 +15,7 @@ spec:
       containers:
       - name: reflex-sim
         image: gcr.io/bubbly-mission-478719-h6/simple-reflex-simulator:{{IMAGE_TAG}}
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
 
