@@ -40,10 +40,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${GCR_IMAGE} ."
+                sh "docker build --no-cache -t ${GCR_IMAGE} ."
             }
         }
-
         stage('Push Docker Image') {
             steps {
                 sh "docker push ${GCR_IMAGE}"
