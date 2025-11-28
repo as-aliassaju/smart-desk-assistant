@@ -105,6 +105,11 @@ about_page = """
                 <li class="list-group-item">Kubernetes Cluster → Load Balancer</li>
             </ul>
 
+            <h5 class="mt-4">Project Flow Diagram</h5>
+            <img src="{{ url_for('static', filename='myappprojectflow.png') }}" 
+                 class="img-fluid rounded shadow-sm mb-3" 
+                 alt="Project Flow">
+
             <a href="/" class="btn btn-primary mt-4">Back to Home</a>
         </div>
     </div>
