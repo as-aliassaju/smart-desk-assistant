@@ -69,7 +69,6 @@ home_page = """
             <pre class="p-3 bg-dark text-white rounded">{{ context }}</pre>
             <a href="/about" class="btn btn-info mt-3">About This Project</a>
             <a href="/context" class="btn btn-secondary mt-3">View Raw JSON</a>
-            <a href="/love" class="btn btn-danger mt-3">Love Message 💖</a>
         </div>
     </div>
 </div>
@@ -116,49 +115,6 @@ about_page = """
 </html>
 """
 
-love_page = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Love Message</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #ffe6e6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Arial', sans-serif;
-        }
-        .card {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            background-color: #fff0f5;
-        }
-        .heart {
-            color: red;
-            font-size: 3rem;
-            animation: beat 1s infinite;
-        }
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h1 class="heart">❤️</h1>
-        <h2 class="mt-3">Love you, Moluse 💖</h2>
-        <p class="mt-2">Sent with lots of love 💌</p>
-        <a href="/" class="btn btn-primary mt-4">Back to Home</a>
-    </div>
-</body>
-</html>
-"""
 
 # -------------------- Routes --------------------
 
@@ -174,9 +130,7 @@ def get_context():
 def about():
     return render_template_string(about_page)
 
-@app.route("/love")
-def love():
-    return render_template_string(love_page)
+
 
 # -------------------- Start Flask --------------------
 
