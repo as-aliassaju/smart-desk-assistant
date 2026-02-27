@@ -6,8 +6,8 @@ import datetime
 
 app = Flask(__name__)
 
-REPO_FOLDER = os.getcwd()  # assumes running inside repo
-CONTEXT_FILE = os.path.join(REPO_FOLDER, "context.yaml")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CONTEXT_FILE = os.path.join(BASE_DIR, "context.yaml")
 
 @app.route("/updateTextFile", methods=["POST"])
 def update_count():

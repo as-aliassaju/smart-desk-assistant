@@ -1,12 +1,19 @@
 from flask import Flask, jsonify, render_template_string
 import yaml
+import os
 
 app = Flask(__name__)
 
 # -------- Load Context --------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONTEXT_FILE = os.path.join(BASE_DIR, "context.yaml")
+
 def load_context():
-    with open("context.yaml") as f:
-        return yaml.safe_load(f)["context"]
+    if os.path.exists(CONTEXT_FILE):
+        with open(CONTEXT_FILE) as f:
+            return yaml.safe_load(f)["context"]
+    else:
+        return {"event_count": 0}
 
 # -------------------- HTML Templates --------------------
 
