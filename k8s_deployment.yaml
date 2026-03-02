@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: reflex-simulator
+  name: vue-python-ci-cd-pipeline
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: reflex-simulator
+      app: vue-python-ci-cd-pipeline
   template:
     metadata:
       labels:
-        app: reflex-simulator
+        app: vue-python-ci-cd-pipeline
     spec:
       containers:
-      - name: reflex-sim
-        image: gcr.io/bubbly-mission-478719-h6/simple-reflex-simulator:{{IMAGE_TAG}}
+      - name: vue-python-ci-cd-pipeline
+        image: us-central1-docker.pkg.dev/ci-cd-pipeline-implementation/aliassajucicdproject/vue-python-ci-cd-appliation:{{IMAGE_TAG}}
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
@@ -23,12 +23,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: reflex-service
+  name: vue-python-ci-cd-pipeline-loadbalancer
 spec:
   selector:
-    app: reflex-simulator
+    app: vue-python-ci-cd-pipeline
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 80          # External port to access
-      targetPort: 5000  # Container port
+      port: 80
+      targetPort: 5000
