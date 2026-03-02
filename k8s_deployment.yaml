@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: vue-python-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: vue-python-app
