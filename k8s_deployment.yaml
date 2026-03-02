@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vue-python-ci-cd-pipeline
+  name: vue-python-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vue-python-ci-cd-pipeline
+      app: vue-python-app
   template:
     metadata:
       labels:
-        app: vue-python-ci-cd-pipeline
+        app: vue-python-app
     spec:
       containers:
-      - name: vue-python-ci-cd-pipeline
+      - name: vue-python-container
         image: us-central1-docker.pkg.dev/ci-cd-pipeline-implementation/aliassajucicdproject/vue-python-ci-cd-appliation:{{IMAGE_TAG}}
         imagePullPolicy: Always
         ports:
@@ -23,10 +23,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vue-python-ci-cd-pipeline-loadbalancer
+  name: vue-python-lb
 spec:
   selector:
-    app: vue-python-ci-cd-pipeline
+    app: vue-python-app
   type: LoadBalancer
   ports:
     - protocol: TCP
