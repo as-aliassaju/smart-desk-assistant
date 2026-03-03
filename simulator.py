@@ -28,7 +28,7 @@ home_page = """
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white">
-            <h3>Reflex Simulator Running</h3>
+            <h3>Hello!</h3>
         </div>
         <div class="card-body">
             <h5 class="mb-3">Live Context Data</h5>
