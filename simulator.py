@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template_string
+from flask import Flask, jsonify, render_template_string, url_for
 import yaml
 import os
 
@@ -74,6 +74,13 @@ about_page = """
                 <li class="list-group-item">Jenkins → Docker → Google Artifact Registry</li>
                 <li class="list-group-item">Artifact Registry → Kubernetes → Load Balancer</li>
             </ul>
+
+            <h5 class="mt-4">Workflow Diagram</h5>
+            <div class="text-center mt-3">
+                <img src="{{ url_for('static', filename='myappprojectflow.png') }}"
+                     class="img-fluid rounded shadow"
+                     alt="Project Workflow Diagram">
+            </div>
 
             <a href="/" class="btn btn-primary mt-4">Back to Home</a>
         </div>
