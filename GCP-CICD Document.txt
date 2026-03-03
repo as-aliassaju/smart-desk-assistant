@@ -1,0 +1,36 @@
+****************GCP Pipeline Project*********************
+
+
+email account: Aliasproject
+password : Alias@1996
+
+Git username: as-aliassaju
+Git email : as.aliassaju
+Git Password : Alias@2026
+
+GCP project : 	ci-cd-pipeline-implementation
+VM name : jenkins-docker-vm
+
+jenkins : 
+
+username : admin	
+email : as.aliassaju
+password : Alias@1996
+
+
+Steps:
+
+1. install git on PC
+2. Create VM
+3. Install Jenkins in VM 
+4. Make sure that the port 8080 is allowed in VM firewall
+5. Install Git on VM
+6. Go to git https://github.com/settings/tokens and generate token here, copy that tocken
+7. Go to http://104.198.221.135:8080/manage/credentials/store/system/domain/_/ and add credential there, git> username and password > password ; copied password > username: git username > id : any id name
+8. Go to http://104.198.221.135:8080/manage/configureTools/ go to git > name : default , Path to Git executable: /usr/bin/git
+9. Go to https://github.com/as-aliassaju/smart-desk-assistant/settings and select webhooks and add a webhook the URL should be the URL of the VM running the Jenkins
+10. Install Docker on VM and connect it with Jenkins.
+11.Create a docker file in the server folder, while building the imaage docker use this file
+12.Now add Docker image name, imaage tag and gcr image variables in Jenkins file and add a stage as build docker image
+13.Go to GCP : enable "Artifact Registry API"
+14.Go to GCP> Artifact Registry > Create> give name and same region as VM> create > copy the path
