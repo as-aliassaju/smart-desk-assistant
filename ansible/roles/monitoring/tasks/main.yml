@@ -1,0 +1,31 @@
+---
+
+- name: Install dependencies
+  apt:
+    name:
+      - curl
+      - apt-transport-https
+    state: present
+    update_cache: yes
+
+- name: Install Helm
+  shell: |
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
+
+- name: Add Prometheus Helm repo
+  command: helm repo add {{ helm_repo_name }} {{ helm_repo_url }}
+
+- name: Update Helm repositories
+  command: helm repo update
+
+- name: Create monitoring namespace
+  command: kubectl create namespace {{ namespace }}
+  ignore_errors: yes
+
+- name: Install Prometheus and Grafana
+  command: >
+    helm install {{ release_name }}
+    {{ helm_repo_name }}/{{ helm_chart }}
+    --namespace {{ namespace }}

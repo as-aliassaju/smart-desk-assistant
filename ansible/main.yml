@@ -1,0 +1,7 @@
+---
+- name: Install Prometheus and Grafana on Kubernetes
+  hosts: monitoring
+  become: yes
+
+  roles:
+    - monitoring

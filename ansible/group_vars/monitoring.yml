@@ -1,0 +1,5 @@
+namespace: monitoring
+helm_repo_name: prometheus-community
+helm_repo_url: https://prometheus-community.github.io/helm-charts
+helm_chart: kube-prometheus-stack
+release_name: monitoring
