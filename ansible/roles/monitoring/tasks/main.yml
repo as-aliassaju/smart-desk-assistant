@@ -12,33 +12,34 @@
 - name: Check if Prometheus Helm repo exists
   command: helm repo list
   register: helm_repo_list
+  ignore_errors: yes
   changed_when: false
 
 - name: Add Prometheus Helm repo
   command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-  when: "'prometheus-community' not in helm_repo_list.stdout"
+  when: helm_repo_list.rc != 0 or "'prometheus-community' not in helm_repo_list.stdout"
 
 - name: Update Helm repositories
   command: helm repo update
 
 - name: Check if monitoring namespace exists
   command: kubectl get namespace monitoring
-  register: ns_check
+  register: namespace_check
   ignore_errors: yes
   changed_when: false
 
 - name: Create monitoring namespace
   command: kubectl create namespace monitoring
-  when: ns_check.rc != 0
+  when: namespace_check.rc != 0
 
-- name: Check if Prometheus stack release exists
+- name: Check if Prometheus stack is installed
   command: helm list -n monitoring
-  register: helm_release_list
+  register: helm_release_check
   changed_when: false
 
-- name: Install or Upgrade Prometheus stack
+- name: Install Prometheus and Grafana
   command: >
     helm upgrade --install prometheus-stack
     prometheus-community/kube-prometheus-stack
     --namespace monitoring
-  when: "'prometheus-stack' not in helm_release_list.stdout"
+  when: "'prometheus-stack' not in helm_release_check.stdout"
