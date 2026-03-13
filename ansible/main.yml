@@ -1,6 +1,7 @@
 ---
 - name: Install Monitoring Stack
-  hosts: monitoring
+  hosts: localhost
+  connection: local
   become: true
 
   roles:
