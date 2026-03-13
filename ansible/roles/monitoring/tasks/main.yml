@@ -1,35 +1,26 @@
 ---
 
-- name: Install dependencies
-  apt:
-    name:
-      - curl
-      - apt-transport-https
-    state: present
-    update_cache: yes
-
-- name: Install Helm
-  shell: |
-    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-  args:
-    creates: /usr/local/bin/helm
-
-- name: Add Prometheus Helm repo
-  command: helm repo add {{ helm_repo_name }} {{ helm_repo_url }}
-  register: helm_repo_add
-  changed_when: "'already exists' not in helm_repo_add.stderr"
+- name: Add Prometheus Helm repository
+  command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  register: helm_repo
+  failed_when: false
+  changed_when: "'already exists' not in helm_repo.stderr"
 
 - name: Update Helm repositories
   command: helm repo update
 
 - name: Create monitoring namespace
-  command: kubectl create namespace {{ namespace }}
-  register: namespace_create
+  command: kubectl get namespace monitoring
+  register: ns_check
   failed_when: false
-  changed_when: "'created' in namespace_create.stdout"
+  changed_when: false
 
-- name: Install Prometheus and Grafana
+- name: Create namespace if missing
+  command: kubectl create namespace monitoring
+  when: ns_check.rc != 0
+
+- name: Install Prometheus and Grafana stack
   command: >
-    helm upgrade --install {{ release_name }}
-    {{ helm_repo_name }}/{{ helm_chart }}
-    --namespace {{ namespace }}
+    helm upgrade --install prometheus-stack
+    prometheus-community/kube-prometheus-stack
+    --namespace monitoring

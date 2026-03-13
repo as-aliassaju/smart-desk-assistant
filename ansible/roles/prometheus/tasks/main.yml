@@ -2,14 +2,22 @@
 
 - name: Add Prometheus Helm repository
   command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-  ignore_errors: yes
+  register: helm_repo
+  failed_when: false
+  changed_when: "'already exists' not in helm_repo.stderr"
 
 - name: Update Helm repositories
   command: helm repo update
 
 - name: Create monitoring namespace
+  command: kubectl get namespace monitoring
+  register: ns_check
+  failed_when: false
+  changed_when: false
+
+- name: Create namespace if missing
   command: kubectl create namespace monitoring
-  ignore_errors: yes
+  when: ns_check.rc != 0
 
 - name: Install Prometheus and Grafana stack
   command: >
