@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "google" {
-  project = var.project_id
-  region  = var.region
-  zone    = var.zone
+  project = "ci-cd-pipeline-implementation"
+  region  = "us-central1"
+  zone    = "us-central1-a"
 }
