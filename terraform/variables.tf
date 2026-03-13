@@ -1,3 +1,18 @@
-variable "project_id" {}
-variable "region" { default = "us-central1" }
-variable "cluster_name" { default = "vue-python-ci-cd" }
+variable "project_id" {
+  type = string
+}
+
+variable "region" {
+  type    = string
+  default = "us-central1"
+}
+
+variable "zone" {
+  type    = string
+  default = "us-central1-a"
+}
+
+variable "cluster_name" {
+  type    = string
+  default = "vue-python-application-cluster"
+}
