@@ -1,26 +1,44 @@
 ---
+- name: Check if Helm exists
+  command: helm version --short
+  register: helm_check
+  ignore_errors: yes
+  changed_when: false
 
-- name: Add Prometheus Helm repository
+- name: Install Helm if not installed
+  shell: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  when: helm_check.rc != 0
+
+- name: Check if Prometheus Helm repo exists
+  command: helm repo list
+  register: helm_repo_list
+  changed_when: false
+
+- name: Add Prometheus Helm repo
   command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-  register: helm_repo
-  failed_when: false
-  changed_when: "'already exists' not in helm_repo.stderr"
+  when: "'prometheus-community' not in helm_repo_list.stdout"
 
 - name: Update Helm repositories
   command: helm repo update
 
-- name: Create monitoring namespace
+- name: Check if monitoring namespace exists
   command: kubectl get namespace monitoring
   register: ns_check
-  failed_when: false
+  ignore_errors: yes
   changed_when: false
 
-- name: Create namespace if missing
+- name: Create monitoring namespace
   command: kubectl create namespace monitoring
   when: ns_check.rc != 0
 
-- name: Install Prometheus and Grafana stack
+- name: Check if Prometheus stack release exists
+  command: helm list -n monitoring
+  register: helm_release_list
+  changed_when: false
+
+- name: Install or Upgrade Prometheus stack
   command: >
     helm upgrade --install prometheus-stack
     prometheus-community/kube-prometheus-stack
     --namespace monitoring
+  when: "'prometheus-stack' not in helm_release_list.stdout"
