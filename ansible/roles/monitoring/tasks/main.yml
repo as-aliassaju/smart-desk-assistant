@@ -16,16 +16,20 @@
 
 - name: Add Prometheus Helm repo
   command: helm repo add {{ helm_repo_name }} {{ helm_repo_url }}
+  register: helm_repo_add
+  changed_when: "'already exists' not in helm_repo_add.stderr"
 
 - name: Update Helm repositories
   command: helm repo update
 
 - name: Create monitoring namespace
   command: kubectl create namespace {{ namespace }}
-  ignore_errors: yes
+  register: namespace_create
+  failed_when: false
+  changed_when: "'created' in namespace_create.stdout"
 
 - name: Install Prometheus and Grafana
   command: >
-    helm install {{ release_name }}
+    helm upgrade --install {{ release_name }}
     {{ helm_repo_name }}/{{ helm_chart }}
     --namespace {{ namespace }}

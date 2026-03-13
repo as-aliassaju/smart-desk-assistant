@@ -1,7 +1,9 @@
 ---
-- name: Install Prometheus and Grafana on Kubernetes
-  hosts: monitoring
-  become: yes
+- name: Install Monitoring Stack
+  hosts: localhost
+  connection: local
+  gather_facts: no
 
   roles:
-    - monitoring
+    - helm
+    - prometheus
