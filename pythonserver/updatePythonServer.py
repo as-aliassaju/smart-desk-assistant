@@ -12,7 +12,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CONTEXT_FILE = os.path.join(BASE_DIR, "context.yaml")
 
 
-@app.route("/updateTextFile", methods=["POST"])
+@app.route("/updateTextFile", methods=["GET","POST"])
 def update_count():
 
     print("New VUE event received")
